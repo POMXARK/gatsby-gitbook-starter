@@ -13,7 +13,7 @@ export default function queryRightSidebar() {
 
 const query = graphql`
   query {
-    allMdx {
+    allMdx(filter: {slug: {ne: null}}) {
       edges {
         node {
           fields {

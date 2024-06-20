@@ -1,9 +1,9 @@
 const path = require('path');
-const { gitbookContent } = require('../../queries');
+const { queryPagesGitbook } = require('./queryPagesGitbook');
 
 exports.createPagesGitbook = (resolve, reject, graphql, createPage) => {
   resolve(
-    graphql(gitbookContent)
+    graphql(queryPagesGitbook)
       .then(result => {
         printErrors(result, reject)
         generateGitbookPages(result, createPage)

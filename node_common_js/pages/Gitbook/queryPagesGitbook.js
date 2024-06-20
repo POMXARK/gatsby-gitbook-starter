@@ -1,8 +1,8 @@
 // gatsby-node.js - генерация страниц
 
-exports.gitbookContent = `
+exports.queryPagesGitbook = `
 {
-  allMdx {
+  allMdx(filter: {slug: {ne: null}}) {
     edges {
       node {
         fields {
