@@ -1,5 +1,5 @@
 
-// Header.js
+// styles.js
 //
 // export const query_2 = graphql`
 //   query headerTitleQuery {
