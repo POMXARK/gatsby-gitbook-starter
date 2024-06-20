@@ -1,10 +1,10 @@
-import Link from '../../link';
+import Link from '../../core/elements/link';
 import config from '../../../../config';
 import Sidebar from '../SideBar';
 import help from '../../images/help.svg';
 import GitHubButton from 'react-github-btn';
 import * as React from 'react';
-import { DarkModeSwitch } from '../../DarkModeSwitch';
+import { DarkModeSwitch } from './Theme/DarkModeSwitch';
 import { StyledBgDiv, myFunction } from './styles';
 
 export default function renderHeader({ location, isDarkThemeActive, toggleActiveTheme },

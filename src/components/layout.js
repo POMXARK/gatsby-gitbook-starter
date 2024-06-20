@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { MDXProvider } from '@mdx-js/react';
 
-import ThemeProvider from './theme/themeProvider';
+import ThemeProvider from './modules/Header/Theme/ThemeSwith/themeProvider';
 import mdxComponents from './mdxComponents';
 import Sidebar from './modules/SideBar';
 import RightSidebar from './modules/RightSidebar';

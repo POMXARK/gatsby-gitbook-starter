@@ -2,9 +2,9 @@ import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider, Global, css } from '@emotion/react';
 
 import { lightTheme, darkTheme } from './index';
-import Header from '../modules/Header';
-import { baseStyles } from '../styles/GlobalStyles';
-import { styles } from '../../custom/styles/styles';
+import Header from '../../index';
+import { baseStyles } from '../../../../core/styles/GlobalStyles';
+import { styles } from '../../../../../custom/styles/styles';
 
 class ThemeProvider extends React.Component {
   state = {
