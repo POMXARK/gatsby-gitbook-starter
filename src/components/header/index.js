@@ -2,14 +2,14 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { StaticQuery, graphql } from 'gatsby';
 import GitHubButton from 'react-github-btn';
-import Link from './link';
+import Link from '../link';
 import Loadable from 'react-loadable';
 
-import config from '../../config.js';
-import LoadingProvider from './mdxComponents/loading';
-import { DarkModeSwitch } from './DarkModeSwitch';
+import config from '../../../config.js';
+import LoadingProvider from '../mdxComponents/loading';
+import { DarkModeSwitch } from '../DarkModeSwitch';
 
-const help = require('./images/help.svg');
+const help = require('../images/help.svg');
 
 const isSearchEnabled = config.header.search && config.header.search.enabled ? true : false;
 
@@ -23,10 +23,10 @@ if (isSearchEnabled && config.header.search.indexName) {
   });
 }
 
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 
 const LoadableComponent = Loadable({
-  loader: () => import('./search/index'),
+  loader: () => import('../search/index'),
   loading: LoadingProvider,
 });
 
@@ -55,34 +55,16 @@ const StyledBgDiv = styled('div')`
 
 const Header = ({ location, isDarkThemeActive, toggleActiveTheme }) => (
   <StaticQuery
-    query={graphql`
-      query headerTitleQuery {
-        site {
-          siteMetadata {
-            headerTitle
-            githubUrl
-            helpUrl
-            tweetText
-            logo {
-              link
-              image
-            }
-            headerLinks {
-              link
-              text
-            }
-          }
-        }
-      }
-    `}
+    query={query}
     render={(data) => {
-      const logoImg = require('./images/logo.svg');
+      console.log('data', data);
+      const logoImg = require('../images/logo.svg');
 
-      const twitter = require('./images/twitter.svg');
+      const twitter = require('../images/twitter.svg');
 
-      const discordBrandsBlock = require('./images/discord-brands-block.svg');
+      const discordBrandsBlock = require('../images/discord-brands-block.svg');
 
-      const twitterBrandsBlock = require('./images/twitter-brands-block.svg');
+      const twitterBrandsBlock = require('../images/twitter-brands-block.svg');
 
       const {
         site: {
@@ -215,5 +197,26 @@ const Header = ({ location, isDarkThemeActive, toggleActiveTheme }) => (
     }}
   />
 );
+
+const query = graphql`
+  query headerTitleQuery {
+    site {
+      siteMetadata {
+        headerTitle
+        githubUrl
+        helpUrl
+        tweetText
+        logo {
+          link
+          image
+        }
+        headerLinks {
+          link
+          text
+        }
+      }
+    }
+  }
+`
 
 export default Header;

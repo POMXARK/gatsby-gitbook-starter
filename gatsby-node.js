@@ -6,30 +6,14 @@ const startCase = require('lodash.startcase');
 
 const config = require('./config');
 
+const { query_1 } = require('./src/node_common_js/queries')
+
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
     resolve(
-      graphql(
-        `
-          {
-            allMdx {
-              edges {
-                node {
-                  fields {
-                    id
-                  }
-                  tableOfContents
-                  fields {
-                    slug
-                  }
-                }
-              }
-            }
-          }
-        `
-      ).then(result => {
+      graphql(query_1).then(result => {
         if (result.errors) {
           console.log(result.errors); // eslint-disable-line no-console
           reject(result.errors);

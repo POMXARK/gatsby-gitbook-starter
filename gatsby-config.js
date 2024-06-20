@@ -1,6 +1,25 @@
-require("dotenv").config();
+require("dotenv").config()
 const queries = require("./src/utils/algolia");
 const config = require("./config");
+
+const strapiConfig = {
+  apiURL: 'http://localhost:1337',
+  accessToken: '4ebb98caecc886f28149b31f0c8bb5c3ae97837b9b2bde1cb8b442b39783eb7fd4c9d86b59195071b46c5cd3a2e88400dedd1d9fa92ec25ef120e08a49e2e3045eada15f06319a9387b3a28b521c524327cd44fdd436f02b4f45958931de55a73d1b6aeaa03650064c14d764cf4c0f253a17e53a891acbe691d0dbdf563277be',
+  collectionTypes: ["content"],
+  queryLimit: 1000,
+  singleTypes: [],
+  maxParallelRequests: 5, // (Optional) Default: Number.POSITIVE_INFINITY
+  remoteFileHeaders: {
+    /**
+     * Customized request headers
+     * For http request with a image or other files need authorization
+     * For expamle: Fetch a CDN file which has a security config when gatsby building needs
+     */
+    // Referer: "https://your-site-domain/",
+    // Authorization: "Bearer eyJhabcdefg_replace_it_with_your_own_token",
+  },
+};
+
 const plugins = [
   'gatsby-plugin-sitemap',
   'gatsby-plugin-sharp',
@@ -18,6 +37,10 @@ const plugins = [
       name: "docs",
       path: `${__dirname}/content/`
     }
+  },
+  {
+    resolve: `gatsby-source-strapi`,
+    options: strapiConfig,
   },
   {
     resolve: 'gatsby-plugin-mdx',
@@ -49,6 +72,7 @@ const plugins = [
     },
   },
 ];
+
 // check and add algolia
 if (config.header.search && config.header.search.enabled && config.header.search.algoliaAppId && config.header.search.algoliaAdminKey) {
   plugins.push({
@@ -61,6 +85,7 @@ if (config.header.search && config.header.search.enabled && config.header.search
     }}
   )
 }
+
 // check and add pwa functionality
 if (config.pwa && config.pwa.enabled && config.pwa.manifest) {
   plugins.push({

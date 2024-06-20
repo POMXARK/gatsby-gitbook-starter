@@ -136,7 +136,7 @@ export const pageQuery = graphql`
         metaDescription
       }
     }
-    allMdx {
+    allMdx(filter: {slug: {ne: null}}) {
       edges {
         node {
           fields {
