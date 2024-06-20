@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
 import { default as defaultTheme } from './theme';
-import Header from './header';
+import Header from './modules/Header';
 
 
 export default function ThemeProvider({ children, theme = {}, location }) {

@@ -1,4 +1,4 @@
-import config from '../../../config';
+import config from '../../../../config';
 import Tree from './tree';
 import { Divider, ListItem } from './styles';
 import { ExternalLink } from 'react-feather';
@@ -6,7 +6,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 
 
-export default function componentSidebar(allMdx) {
+export default function renderSidebar(allMdx) {
   return (
     <SidebarStyles>
       {config.sidebar.title ? (
