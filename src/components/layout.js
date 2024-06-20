@@ -4,8 +4,8 @@ import { MDXProvider } from '@mdx-js/react';
 
 import ThemeProvider from './theme/themeProvider';
 import mdxComponents from './mdxComponents';
-import Sidebar from './sidebar';
-import RightSidebar from './rightSidebar';
+import Sidebar from '../modules/SideBar';
+import RightSidebar from '../modules/RightSidebar';
 import config from '../../config.js';
 
 const Wrapper = styled('div')`

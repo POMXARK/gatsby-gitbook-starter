@@ -1,9 +1,9 @@
-import config from '../../config';
-import { ListItem } from './sidebar/styles';
+import config from '../../../config';
+import { ListItem } from '../SideBar/styles';
 import * as React from 'react';
 import styled from '@emotion/styled';
 
-export default function RightSidebar(allMdx) {
+export default function componentRightSidebar(allMdx) {
   let navItems = [];
 
   let finalNavItems;

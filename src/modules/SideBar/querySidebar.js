@@ -1,27 +1,32 @@
 import { graphql, StaticQuery } from 'gatsby';
 import * as React from 'react';
-import RightSidebar from '../RightSidebar';
+import componentSidebar from './componentSidebar';
 
-export default function rightSidebarQuery() {
+export default function querySidebar() {
   return (
     <StaticQuery
       query={query}
-      render={({ allMdx }) => RightSidebar(allMdx)}
+      render={({ allMdx }) => componentSidebar(allMdx)}
     />
   );
 }
 
 const query = graphql`
   query {
-    allMdx {
+    allMdx(filter: {slug: {ne: null}}) {
       edges {
         node {
           fields {
             slug
+            title
           }
-          tableOfContents
         }
       }
     }
   }
 `
+
+
+
+
+

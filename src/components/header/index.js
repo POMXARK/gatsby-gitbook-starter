@@ -23,7 +23,7 @@ if (isSearchEnabled && config.header.search.indexName) {
   });
 }
 
-import Sidebar from '../sidebar';
+import Sidebar from '../../modules/SideBar';
 
 const LoadableComponent = Loadable({
   loader: () => import('../search/index'),
