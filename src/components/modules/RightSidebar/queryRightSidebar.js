@@ -6,13 +6,13 @@ export default function queryRightSidebar() {
   return (
     <StaticQuery
       query={query}
-      render={({ allMdx }) => renderRightSidebar(allMdx)}
+      render={({ allMdx, allStrapiContent }) => renderRightSidebar(allMdx, allStrapiContent)}
     />
   );
 }
 
 const query = graphql`
-  query {
+  {
     allMdx(filter: {slug: {ne: null}}) {
       edges {
         node {
@@ -20,6 +20,22 @@ const query = graphql`
             slug
           }
           tableOfContents
+        }
+      }
+    }
+    allStrapiContent {
+      edges {
+        node {
+          fields {
+            slug
+          }
+          article {
+            data {
+              childMdx {
+                tableOfContents
+              }
+            }
+          }
         }
       }
     }

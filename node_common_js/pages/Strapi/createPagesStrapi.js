@@ -1,12 +1,12 @@
 const path = require('path');
-const { queryPagesGitbook } = require('./queryPagesGitbook');
+const { queryPagesStrapi } = require('./queryPagesStrapi');
 
-exports.createPagesGitbook = (resolve, reject, graphql, createPage) => {
+exports.createPagesStrapi = (resolve, reject, graphql, createPage) => {
   resolve(
-    graphql(queryPagesGitbook)
+    graphql(queryPagesStrapi)
       .then(result => {
         printErrors(result, reject)
-        generateGitbookPages(result, createPage)
+        generateStrapiPages(result, createPage)
       })
   );
 }
@@ -18,10 +18,10 @@ printErrors = (result, reject) => {
   }
 }
 
-// сначала выполнится createNodePagesGitbook
-generateGitbookPages = (result, createPage) => {
+generateStrapiPages = (result, createPage) => {
   // Create blog posts pages.
-  result.data.allMdx.edges.forEach(({ node }) => {
+  result.data.allStrapiContent.edges.forEach(({ node }) => {
+    const slug = node.article.data.childMdx.frontmatter.title
     createPage({
       path: node.fields.slug ? node.fields.slug : '/',
       component: path.resolve('./src/templates/docs.js'),

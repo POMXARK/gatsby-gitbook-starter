@@ -1,5 +1,7 @@
 // gatsby-node.js - генерация страниц
 
+// сначала выполнится createNodeGitbook, после поля можно извлечь в fields
+
 exports.queryPagesGitbook = `
 {
   allMdx(filter: {slug: {ne: null}}) {
@@ -7,11 +9,9 @@ exports.queryPagesGitbook = `
       node {
         fields {
           id
-        }
-        tableOfContents
-        fields {
           slug
         }
+        tableOfContents
       }
     }
   }

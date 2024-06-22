@@ -2,7 +2,6 @@ const config = require('../../../config');
 const startCase = require('lodash.startcase');
 
 exports.createNodeGitbook = (node, getNode, actions, createNodeField) => {
-  if (node.internal.type === `Mdx`) {
     const parent = getNode(node.parent);
 
     let value = parent.relativePath.replace(parent.ext, '');
@@ -36,5 +35,4 @@ exports.createNodeGitbook = (node, getNode, actions, createNodeField) => {
       node,
       value: node.frontmatter.title || startCase(parent.name),
     });
-  }
 }

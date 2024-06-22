@@ -6,7 +6,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 
 
-export default function renderSidebar(allMdx) {
+export default function renderSidebar(allMdx, allStrapiContent) {
   return (
     <SidebarStyles>
       {config.sidebar.title ? (
@@ -17,6 +17,9 @@ export default function renderSidebar(allMdx) {
       ) : null}
       <ul className={'sideBarUL'}>
         <Tree edges={allMdx.edges} />
+        <Tree edges={allStrapiContent.edges} />
+
+         {/*https://hasura.io/*/}
         {config.sidebar.links && config.sidebar.links.length > 0 && <Divider />}
         {config.sidebar.links.map((link, key) => {
           if (link.link !== '' && link.text !== '') {
@@ -29,6 +32,7 @@ export default function renderSidebar(allMdx) {
           }
         })}
       </ul>
+
     </SidebarStyles>
   );
 }
