@@ -30,16 +30,6 @@ const query = graphql`
             slug
             title
           }
-          slug
-          article {
-            data {
-              childMdx {
-                frontmatter {
-                  title
-                }
-              }
-            }
-          }
         }
       }
     }

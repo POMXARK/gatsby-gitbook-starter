@@ -1,8 +1,8 @@
 import * as React from 'react';
-import OpenedSvg from '../../images/opened';
-import ClosedSvg from '../../images/closed';
-import config from '../../../../config';
-import Link from '../../core/elements/link';
+import OpenedSvg from '../../../images/opened';
+import ClosedSvg from '../../../images/closed';
+import config from '../../../../../config';
+import Link from '../../../core/elements/link';
 
 const TreeNode = ({ className = '', setCollapsed, collapsed, url, title, items, ...rest }) => {
   const isCollapsed = collapsed[url];
@@ -11,7 +11,8 @@ const TreeNode = ({ className = '', setCollapsed, collapsed, url, title, items, 
     setCollapsed(url);
   };
 
-  const hasChildren = items.length !== 0;
+  const subItems = items.find(item => item.items.length > 0);
+  const hasChildren = items.length !== 0 || subItems;
 
   let location;
 
@@ -35,17 +36,18 @@ const TreeNode = ({ className = '', setCollapsed, collapsed, url, title, items, 
           ) : null}
         </Link>
       )}
-
       {!isCollapsed && hasChildren ? (
         <ul>
-          {items.map((item, index) => (
-            <TreeNode
-              key={item.url + index.toString()}
-              setCollapsed={setCollapsed}
-              collapsed={collapsed}
-              {...item}
-            />
-          ))}
+          {items.map((item, index) => {
+           return (
+             <TreeNode
+               key={item.url + index.toString()}
+               setCollapsed={setCollapsed}
+               collapsed={collapsed}
+               {...item}
+             />
+           )
+          })}
         </ul>
       ) : null}
     </li>

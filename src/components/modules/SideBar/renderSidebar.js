@@ -1,5 +1,5 @@
 import config from '../../../../config';
-import Tree from './tree';
+import Tree from './Tree/tree';
 import { Divider, ListItem } from './styles';
 import { ExternalLink } from 'react-feather';
 import * as React from 'react';
