@@ -2,16 +2,11 @@ import { graphql, StaticQuery } from 'gatsby';
 import * as React from 'react';
 import renderHeader from './renderHeader';
 
-export default function queryHeader ({ location, isDarkThemeActive, toggleActiveTheme },
-  isSearchEnabled
-) {
+export default function queryHeader ({ location, isDarkThemeActive, toggleActiveTheme }) {
   return (
     <StaticQuery
       query={query}
-      render={(data) => renderHeader(
-        { location, isDarkThemeActive, toggleActiveTheme },
-        isSearchEnabled, data
-        )}
+      render={(data) => renderHeader({ location, isDarkThemeActive, toggleActiveTheme }, data)}
     />
   )
 }

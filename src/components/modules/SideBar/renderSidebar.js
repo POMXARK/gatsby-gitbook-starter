@@ -16,9 +16,8 @@ export default function renderSidebar(allMdx, allStrapiContent) {
         />
       ) : null}
       <ul className={'sideBarUL'}>
-        <Tree edges={allMdx.edges} />
-        <Tree edges={allStrapiContent.edges} />
-
+        {allMdx ? <Tree edges={allMdx.edges} /> : null}
+        {allStrapiContent ? <Tree edges={allStrapiContent.edges} /> : null}
          {/*https://hasura.io/*/}
         {config.sidebar.links && config.sidebar.links.length > 0 && <Divider />}
         {config.sidebar.links.map((link, key) => {

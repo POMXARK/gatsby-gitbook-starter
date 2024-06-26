@@ -14,15 +14,16 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { PoweredBy } from './styles';
 import { Search } from '@styled-icons/fa-solid/Search';
-import Input from './input';
+import Input, { Form } from './input';
 import * as hitComps from './hitComps';
+import FuseSearch from './FuseSearch';
 
 const SearchIcon = styled(Search)`
   width: 1em;
   pointer-events: none;
 `;
 
-const HitsWrapper = styled.div`
+export const HitsWrapper = styled.div`
   display: ${props => (props.show ? `grid` : `none`)};
   max-height: 80vh;
   overflow: scroll;
@@ -101,7 +102,7 @@ const Results = connectStateResults(
     (searching && `Searching...`) || (res && res.nbHits === 0 && `No results for '${state.query}'`)
 );
 
-const useClickOutside = (ref, handler, events) => {
+export const useClickOutside = (ref, handler, events) => {
   if (!events) events = [`mousedown`, `touchstart`];
   const detectClickOutside = event =>
     ref && ref.current && !ref.current.contains(event.target) && handler();
@@ -128,30 +129,38 @@ export default function SearchComponent({ indices, collapse, hitsAsGrid }) {
 
   useClickOutside(ref, () => setFocus(false));
   const displayResult = query.length > 0 && focus ? 'showResults' : 'hideResults';
-  return (
-    <InstantSearch
-      searchClient={searchClient}
-      indexName={indices[0].name}
-      onSearchStateChange={({ query }) => setQuery(query)}
-      root={{ Root, props: { ref } }}
-    >
-      <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
-      <HitsWrapper
-        className={'hitWrapper ' + displayResult}
-        show={query.length > 0 && focus}
-        asGrid={hitsAsGrid}
+  console.log('searchClient', searchClient)
+  console.log('indices', indices)
+  if (indices.length > 0) {
+    return (
+      <InstantSearch
+        searchClient={searchClient}
+        // indexName={indices[0].name}
+        onSearchStateChange={({ query }) => setQuery(query)}
+        root={{ Root, props: { ref } }}
       >
-        {indices.map(({ name, title, hitComp, type }) => {
-          return (
-            <Index key={name} indexName={name}>
-              <Results />
-              <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
-            </Index>
-          );
-        })}
-        <PoweredBy />
-      </HitsWrapper>
-      <Configure hitsPerPage={5} />
-    </InstantSearch>
-  );
+        <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
+          <HitsWrapper
+            className={'hitWrapper ' + displayResult}
+            show={query.length > 0 && focus}
+            asGrid={hitsAsGrid}
+          >
+            {indices.map(({ name, title, hitComp, type }) => {
+              return (
+                <Index key={name} indexName={name}>
+                  <Results />
+                  <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
+                </Index>
+              );
+            })}
+            <PoweredBy />
+          </HitsWrapper>
+        <Configure hitsPerPage={5} />
+      </InstantSearch>
+    );
+  }
+
+  if (config.driverSearch.fuse) {
+    return (<FuseSearch hitsAsGrid={hitsAsGrid}/>)
+  }
 }

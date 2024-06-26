@@ -1,9 +1,9 @@
 // in browser
 
 import{ Component } from 'react';
-import { graphql } from 'gatsby';
 import config from '../../config';
 import layout from './layout';
+import { graphql } from 'gatsby';
 
 const forcedNavOrder = config.sidebar.forcedNavOrder;
 
@@ -11,30 +11,36 @@ export default class MDXRuntimeTest extends Component {
   render() {
     const { data } = this.props;
 
+    console.log('data', data)
+
+    let navGitbook, navStrapi, nav;
+
     if (!data) {
       return this.props.children;
     }
-    const {
-      allMdx,
-      mdx,
-      allStrapiContent,
-      strapiContent,
-      site: {
-        siteMetadata: { docsLocation, title },
-      },
-    } = data;
+    if (config.driverContent.gitbook) {
+      var { allMdx, mdx , site: { siteMetadata: { docsLocation, title }, }, } = data;
+     // var { allMdx, mdx } = data;
 
-    let navGitbook = navLinks(allMdx)
-    let navStrapi = navLinks(allStrapiContent)
-    const nav = navGitbook.concat(navStrapi)
-
-    if (mdx) {
-      return layout(mdx, this.props, nav);
+      nav = navGitbook = navLinks(allMdx)
+    }
+    if (config.driverContent.strapi) {
+      var {allStrapiContent, strapiContent } = data;
+      console.log('strapiContent', strapiContent)
+      nav = navStrapi = navLinks(allStrapiContent)
     }
 
-    const strapi = {...strapiContent.article.data.childMdx, ...strapiContent}
+    if (strapiContent && config.driverContent.gitbook && config.driverContent.strapi) {
+       nav = navGitbook.concat(navStrapi)
+      console.log('strapiContent', strapiContent)
+       const strapi = {...strapiContent.article.data.childMdx, ...strapiContent}
 
-    return layout(strapi, this.props, nav, docsLocation);
+       return layout(strapi, this.props, nav, docsLocation);
+    }
+
+    if (config.driverContent.gitbook) {
+      return layout(mdx, this.props, nav);
+    }
   }
 }
 
@@ -79,7 +85,93 @@ const navLinks = (mdx) => {
   return nav.filter(item   => item);
 }
 
-export const pageQuery = graphql`
+// if (config.driverContent.gitbook && config.driverContent.strapi) {
+  export const pageQuery = graphql`
+    query ($id: String!) {
+      site {
+        siteMetadata {
+          title
+          docsLocation
+        }
+      }
+      mdx(fields: {id: {eq: $id}}) {
+        fields {
+          id
+          title
+          slug
+        }
+        body
+        tableOfContents
+        parent {
+          ... on File {
+            relativePath
+          }
+        }
+        frontmatter {
+          metaTitle
+          metaDescription
+        }
+      }
+      allMdx(filter: {slug: {ne: null}}) {
+        edges {
+          node {
+            fields {
+              slug
+              title
+            }
+          }
+        }
+      }
+      strapiContent(id: {eq: $id}) {
+        id
+        slug
+        article {
+          data {
+            childMdx {
+              body
+              tableOfContents
+              frontmatter {
+                metaTitle
+                metaDescription
+                title
+              }
+            }
+          }
+        }
+        fields {
+          id
+          slug
+          title
+        }
+      }
+      allStrapiContent(filter: {}) {
+        edges {
+          node {
+            fields {
+              id
+              title
+              slug
+            }
+            article {
+              data {
+                childMdx {
+                  frontmatter {
+                    title
+                  }
+                }
+              }
+            }
+            slug
+          }
+        }
+      }
+    }
+  `;
+
+
+
+
+const pageQueryGitbook = graphql`
   query ($id: String!) {
     site {
       siteMetadata {
@@ -115,6 +207,12 @@ export const pageQuery = graphql`
         }
       }
     }
+
+  }
+`;
+
+const pageQueryStrapi = graphql`
+  query ($id: String!) {
     strapiContent(id: {eq: $id}) {
       id
       slug

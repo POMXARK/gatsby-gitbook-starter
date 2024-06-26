@@ -1,17 +1,22 @@
 import { graphql, StaticQuery } from 'gatsby';
 import * as React from 'react';
 import renderSidebar from './renderSidebar';
+import config from '../../../../config';
 
 export default function querySidebar() {
-  return (
-    <StaticQuery
-      query={query}
-      render={({ allMdx, allStrapiContent }) => renderSidebar(allMdx, allStrapiContent)}
-    />
-  );
+  if (config.driverContent.gitbook && config.driverContent.strapi) {
+    return (
+      <StaticQuery
+        query={queryGitbookStrapi}
+        render={({ allMdx, allStrapiContent }) => renderSidebar(allMdx, allStrapiContent)}
+        // render={({ allMdx }) => renderSidebar(allMdx, null)}
+      />
+    );
+  }
 }
 
-const query = graphql`
+
+const queryGitbookStrapi = graphql`
   {
     allMdx(filter: {slug: {ne: null}}) {
       edges {
@@ -33,9 +38,33 @@ const query = graphql`
         }
       }
     }
-  }
-`
+  }`
 
+const queryStrapi = graphql`
+      {
+        allStrapiContent {
+          edges {
+            node {
+              fields {
+                slug
+                title
+              }
+            }
+          }
+        }
+      }`
 
-
+const queryGitbook = graphql`
+      {
+        allMdx(filter: {slug: {ne: null}}) {
+          edges {
+            node {
+              fields {
+                slug
+                title
+              }
+            }
+          }
+        }
+      }`
 

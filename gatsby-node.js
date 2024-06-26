@@ -3,23 +3,28 @@ const { createPagesGitbook } = require('./node_common_js/pages/Gitbook/createPag
 const { createNodeGitbook } = require('./node_common_js/pages/Gitbook/createNodeGitbook');
 const { createPagesStrapi } = require('./node_common_js/pages/Strapi/createPagesStrapi');
 const { createNodeStrapi } = require('./node_common_js/pages/Strapi/createNodeStrapi');
+const config  =  require('./config');
 
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
-    createPagesGitbook(resolve, reject, graphql, createPage)
-    createPagesStrapi(resolve, reject, graphql, createPage)
+    if (config.driverContent.gitbook) {
+      createPagesGitbook(resolve, reject, graphql, createPage)
+    }
+    if (config.driverContent.strapi) {
+      createPagesStrapi(resolve, reject, graphql, createPage)
+    }
   });
 };
 
 // transformer
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
-    if (node.internal.type === 'Mdx') {
+    if (config.driverContent.gitbook && node.internal.type === 'Mdx') {
       createNodeGitbook(node, getNode, actions, createNodeField)
     }
-    if (node.internal.type === 'STRAPI_CONTENT') {
+    if (config.driverContent.strapi && node.internal.type === 'STRAPI_CONTENT') {
       createNodeStrapi(node, getNode, actions, createNodeField);
     }
 };

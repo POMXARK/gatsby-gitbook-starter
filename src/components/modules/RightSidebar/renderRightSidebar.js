@@ -30,7 +30,7 @@ export default function renderRightSidebar(allMdx, allStrapiContent) {
 
 
 const items = (allMdx, finalNavItems) => {
-  if (allMdx.edges !== undefined && allMdx.edges.length > 0) {
+  if (allMdx && allMdx.edges !== undefined && allMdx.edges.length > 0) {
     const navItems = allMdx.edges.map((item, index) => {
       let innerItems;
 

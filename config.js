@@ -5,6 +5,19 @@ const config = {
     gaTrackingId: null,
     trailingSlash: false,
   },
+  driverSearch: {
+    fuse: true,
+    algolia: false,
+  },
+  driverContent: {
+    gitbook: true,
+    strapi: {
+      localized: true,
+      fieldset: {
+        'article': true
+      }
+    }
+  },
   header: {
     logo: 'https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/brand.svg',
     logoLink: 'https://hasura.io/learn/',
@@ -29,7 +42,7 @@ const config = {
 		  </li>`,
     links: [{ text: '', link: '' }],
     search: {
-      enabled: false,
+      enabled: true,
       indexName: '',
       algoliaAppId: process.env.GATSBY_ALGOLIA_APP_ID,
       algoliaSearchKey: process.env.GATSBY_ALGOLIA_SEARCH_KEY,
@@ -44,7 +57,7 @@ const config = {
     collapsedNav: [
       '/codeblock', // add trailing slash if enabled above // по умолчанию свернут
     ],
-    links: [{ text: 'Hasura', link: 'https://hasura.io' }],
+    links: [{ text: 'Hasura', link: 'https://h2asura.io' }],
     frontLine: false,
     ignoreIndex: true,
     title:

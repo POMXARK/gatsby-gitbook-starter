@@ -1,11 +1,12 @@
-require("dotenv").config()
-const queries = require("./src/utils/algolia");
-const config = require("./config");
+require('dotenv').config();
+const queries = require('./src/utils/algolia');
+const config = require('./config');
+const { concat } = require('lodash');
 
 const strapiConfig = {
   apiURL: 'http://localhost:1337',
   accessToken: '4ebb98caecc886f28149b31f0c8bb5c3ae97837b9b2bde1cb8b442b39783eb7fd4c9d86b59195071b46c5cd3a2e88400dedd1d9fa92ec25ef120e08a49e2e3045eada15f06319a9387b3a28b521c524327cd44fdd436f02b4f45958931de55a73d1b6aeaa03650064c14d764cf4c0f253a17e53a891acbe691d0dbdf563277be',
-  collectionTypes: ["category", "sub-category", "content"],
+  collectionTypes: ['category', 'sub-category', 'content'],
   queryLimit: 1000,
   singleTypes: [],
   maxParallelRequests: 5, // (Optional) Default: Number.POSITIVE_INFINITY
@@ -26,17 +27,81 @@ const plugins = [
   {
     resolve: `gatsby-plugin-layout`,
     options: {
-        component: require.resolve(`./src/templates/docs.js`)
-    }
+      component: require.resolve(`./src/templates/docs.js`),
+    },
   },
+
+  {
+    resolve: `gatsby-plugin-fusejs`,
+    options: {
+      query: `
+                  {
+            allMdx(filter: {slug: {ne: null}}) {
+              nodes {
+                id
+                fields {
+                  slug
+                }
+                frontmatter {
+                  title
+                }
+                headings {
+                  value
+                }
+                excerpt(pruneLength: 300)
+              }
+            }
+            allStrapiContent {
+              nodes {
+                fields {
+                  slug
+                  title
+                  id
+                }
+                article {
+                  data {
+                    childMdx {
+                      excerpt(pruneLength: 300)
+                      headings {
+                        value
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+ `,
+      keys: ['title', 'headings'],
+      normalizer: ({ data }) => {
+        const _allMdx = data.allMdx.nodes.map((node) => ({
+          id: node.id,
+          title: node.frontmatter.title,
+          slug: node.fields.slug,
+          excerpt: node.excerpt,
+          headings: node.headings.value,
+        }));
+        const _allStrapiContent = data.allStrapiContent.nodes.map((node) => ({
+          id: node.fields.id,
+          title: node.fields.title,
+          slug: node.fields.slug,
+          excerpt: node.article.data.childMdx.excerpt,
+          headings: node.article.data.childMdx.headings.value,
+        }));
+
+        return concat(..._allMdx, ..._allStrapiContent);
+      },
+    },
+  },
+
   'gatsby-plugin-emotion',
   'gatsby-plugin-react-helmet',
   {
-    resolve: "gatsby-source-filesystem",
+    resolve: 'gatsby-source-filesystem',
     options: {
-      name: "docs",
-      path: `${__dirname}/content/`
-    }
+      name: 'docs',
+      path: `${__dirname}/content/`,
+    },
   },
   {
     resolve: `gatsby-source-strapi`,
@@ -47,18 +112,18 @@ const plugins = [
     options: {
       gatsbyRemarkPlugins: [
         {
-          resolve: "gatsby-remark-images",
+          resolve: 'gatsby-remark-images',
           options: {
             maxWidth: 1035,
-            sizeByPixelDensity: true
-          }
+            sizeByPixelDensity: true,
+          },
         },
         {
-          resolve: 'gatsby-remark-copy-linked-files'
-        }
+          resolve: 'gatsby-remark-copy-linked-files',
+        },
       ],
-      extensions: [".mdx", ".md"]
-    }
+      extensions: ['.mdx', '.md'],
+    },
   },
   {
     resolve: `gatsby-plugin-gtag`,
@@ -76,21 +141,22 @@ const plugins = [
 // check and add algolia
 if (config.header.search && config.header.search.enabled && config.header.search.algoliaAppId && config.header.search.algoliaAdminKey) {
   plugins.push({
-    resolve: `gatsby-plugin-algolia`,
-    options: {
-      appId: config.header.search.algoliaAppId, // algolia application id
-      apiKey: config.header.search.algoliaAdminKey, // algolia admin key to index
-      queries,
-      chunkSize: 10000, // default: 1000
-    }}
-  )
+      resolve: `gatsby-plugin-algolia`,
+      options: {
+        appId: config.header.search.algoliaAppId, // algolia application id
+        apiKey: config.header.search.algoliaAdminKey, // algolia admin key to index
+        queries,
+        chunkSize: 10000, // default: 1000
+      },
+    },
+  );
 }
 
 // check and add pwa functionality
 if (config.pwa && config.pwa.enabled && config.pwa.manifest) {
   plugins.push({
-      resolve: `gatsby-plugin-manifest`,
-      options: {...config.pwa.manifest},
+    resolve: `gatsby-plugin-manifest`,
+    options: { ...config.pwa.manifest },
   });
   plugins.push({
     resolve: 'gatsby-plugin-offline',
@@ -130,6 +196,6 @@ module.exports = {
     PRESERVE_WEBPACK_CACHE: false, // (Umbrella Issue (https://gatsby.dev/cache-clearing-feedback)) · Use webpack's persistent caching and don't delete webpack's cache when changing gatsby-node.js & gatsby-config.js files.
     PRESERVE_FILE_DOWNLOAD_CACHE: false, // (Umbrella Issue (https://gatsby.dev/cache-clearing-feedback)) · Don't delete the downloaded files cache when changing gatsby-node.js & gatsby-config.js files.
     PARALLEL_SOURCING: false, // EXPERIMENTAL · (Umbrella Issue (https://gatsby.dev/parallel-sourcing-feedback)) · Run all source plugins at the same time instead of serially. For sites with multiple source plugins, this can speedup sourcing and transforming considerably.
-    FUNCTIONS: false // EXPERIMENTAL · (Umbrella Issue (https://gatsby.dev/functions-feedback)) · Compile Serverless functions in your Gatsby project and write them to disk, ready to deploy to Gatsby Cloud
-  }
+    FUNCTIONS: false, // EXPERIMENTAL · (Umbrella Issue (https://gatsby.dev/functions-feedback)) · Compile Serverless functions in your Gatsby project and write them to disk, ready to deploy to Gatsby Cloud
+  },
 };

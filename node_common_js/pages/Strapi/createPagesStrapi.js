@@ -21,13 +21,15 @@ printErrors = (result, reject) => {
 generateStrapiPages = (result, createPage) => {
   // Create blog posts pages.
   result.data.allStrapiContent.edges.forEach(({ node }) => {
-    const slug = node.article.data.childMdx.frontmatter.title
-    createPage({
-      path: node.fields.slug ? node.fields.slug : '/',
-      component: path.resolve('./src/templates/docs.js'),
-      context: {
-        id: node.fields.id,
-      },
-    });
+    if (node.article.data) {
+      const slug = node.article.data.childMdx.frontmatter.title
+      createPage({
+        path: node.fields.slug ? node.fields.slug : '/',
+        component: path.resolve('./src/templates/docs.js'),
+        context: {
+          id: node.fields.id,
+        },
+      });
+    }
   });
 }

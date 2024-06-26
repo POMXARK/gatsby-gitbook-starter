@@ -64,7 +64,7 @@ const Input = styled.input`
   {collapseExpand}
 `;
 
-const Form = styled.form`
+export const Form = styled.form`
   display: flex;
   align-items: center;
   @media only screen and (max-width: 767px) {

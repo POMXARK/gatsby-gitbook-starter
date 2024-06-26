@@ -6,9 +6,31 @@ import GitHubButton from 'react-github-btn';
 import * as React from 'react';
 import { DarkModeSwitch } from './Theme/DarkModeSwitch';
 import { StyledBgDiv, myFunction } from './styles';
+import Loadable from 'react-loadable';
+import LoadingProvider from '../../mdxComponents/loading';
 
-export default function renderHeader({ location, isDarkThemeActive, toggleActiveTheme },
-                                     isSearchEnabled, data) {
+export default function renderHeader({ location, isDarkThemeActive, toggleActiveTheme }, data) {
+
+  //----------
+  const isSearchEnabled = config.header.search && config.header.search.enabled;
+
+  let searchIndices = [];
+
+  if (isSearchEnabled && config.header.search.indexName) {
+    searchIndices.push({
+      name: `${config.header.search.indexName}`,
+      title: `Results`,
+      hitComp: `PageHit`,
+    });
+  }
+
+  const LoadableComponent = Loadable({
+    loader: () => import('../../search'),
+    loading: LoadingProvider,
+  });
+
+  //----------
+
   console.log('data', data);
   const logoImg = require('../../images/logo.svg');
 
