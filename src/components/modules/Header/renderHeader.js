@@ -11,6 +11,7 @@ import LoadingProvider from '../../mdxComponents/loading';
 import Select from 'react-select'
 import { Store, useStore } from 'react-stores';
 import { graphql, useStaticQuery } from 'gatsby';
+import { globalHistory } from '@reach/router';
 
 export const myStore = new Store({
   lang: { value: 'en', label: 'en' } , // initial state values
@@ -48,10 +49,13 @@ export default function renderHeader({ location, isDarkThemeActive, toggleActive
 
   const setUserChoice = (choice) => {
     myStore.setState({ lang: choice });
-    const path = (window.location.pathname.split('/')).slice(2)
+    const path = globalHistory.location.protocol === 'http:' ?
+      (window.location.pathname.split('/')).slice(2) : (window.location.pathname.split('/')).slice(3)
     const url = `/${choice.value}/${path.join('/')}`
+    console.log('urls', urls)
+    console.log('url', url)
     if (urls.has(url)) {
-      window.location.href = url;
+      window.location.href = globalHistory.location.protocol === 'http:' ? url : config.gatsby.pathPrefix + url;
     }
   }
 

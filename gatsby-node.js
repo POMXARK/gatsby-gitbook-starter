@@ -21,12 +21,15 @@ exports.createPages = ({ graphql, actions }) => {
 // transformer
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
-    if (config.driverContent.gitbook && node.internal.type === 'Mdx') {
-      createNodeGitbook(node, getNode, actions, createNodeField)
+  if (config.driverContent.gitbook && node.internal.type === 'Mdx') {
+    const parent = getNode(node.parent);
+    if (!parent.internal.type.startsWith('STRAPI')) {
+      createNodeGitbook(node, parent, getNode, createNodeField)
     }
-    if (config.driverContent.strapi && node.internal.type === 'STRAPI_CONTENT') {
-      createNodeStrapi(node, getNode, actions, createNodeField);
-    }
+  }
+  if (config.driverContent.strapi && node.internal.type === 'STRAPI_CONTENT') {
+    createNodeStrapi(node, getNode, createNodeField);
+  }
 };
 
 exports.onCreateWebpackConfig = ({ actions }) => {

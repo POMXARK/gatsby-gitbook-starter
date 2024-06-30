@@ -1,35 +1,41 @@
 const matter = require('gray-matter');
 
-exports.createNodeStrapi = (node, getNode, actions, createNodeField) => {
+exports.createNodeStrapi = (node, getNode, createNodeField) => {
+  let title;
+  if (node.children.length > 0) {
     const children = getNode(node.children)
-    const title = matter(children.article).data.title
-    const locale = node.locale ? '/' + node.locale : '/default'
+    title = matter(children.article).data.title
+  } else {
+    title = matter(node.article.data).data.title
+  }
 
-    createNodeField({
-      name: 'id',
-      node,
-      value: node.id,
-    });
+  const locale = node.locale ? '/' + node.locale : '/default'
 
-    createNodeField({
-      name: 'title',
-      node,
-      value: title,
-    });
+  createNodeField({
+    name: 'id',
+    node,
+    value: node.id,
+  });
 
-    let slug = '/' + title.replace(/\s+/g, '-').toLowerCase();
+  createNodeField({
+    name: 'title',
+    node,
+    value: title,
+  });
 
-    if (node.category___NODE) {
-      let categories = '/' + getNode(node.category___NODE).name.replace(/\s+/g, '-').toLowerCase();
-      if (node.sub_category___NODE) {
-        categories += '/' + getNode(node.sub_category___NODE).name.replace(/\s+/g, '-').toLowerCase()
-      }
-      slug = categories + slug
+  let slug = '/' + title.replace(/\s+/g, '-').toLowerCase();
+
+  if (node.category___NODE) {
+    let categories = '/' + getNode(node.category___NODE).name.replace(/\s+/g, '-').toLowerCase();
+    if (node.sub_category___NODE) {
+      categories += '/' + getNode(node.sub_category___NODE).name.replace(/\s+/g, '-').toLowerCase()
     }
+    slug = categories + slug
+  }
 
-    createNodeField({
-      name: `slug`,
-      node,
-      value: locale + slug,
-    });
+  createNodeField({
+    name: `slug`,
+    node,
+    value: locale + slug,
+  });
 }

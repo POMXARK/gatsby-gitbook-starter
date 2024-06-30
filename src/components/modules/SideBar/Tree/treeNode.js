@@ -5,7 +5,7 @@ import config from '../../../../../config';
 import Link from '../../../core/elements/link';
 import { myStore } from '../../Header/renderHeader';
 import { useStore } from 'react-stores';
-import { useStaticQuery } from 'gatsby';
+import { graphql, useStaticQuery } from 'gatsby';
 
 const query =
 graphql`
@@ -55,33 +55,33 @@ const TreeNode = ({ className = '', setCollapsed, collapsed, url, title, locale,
       <li className={calculatedClassName}
           hidden={locale && locale.length > 0 && urls.has(localedUrl) && locale !== myStoreState.lang.value}
       >
-          {title && (
-            <Link to={url}>
-              {title}
-              {!config.sidebar.frontLine && title && hasChildren ? (
-                <button onClick={collapse} aria-label="collapse" className="collapser">
-                  {!isCollapsed ? <OpenedSvg /> : <ClosedSvg />}
-                </button>
-              ) : null}
-            </Link>
-          )}
-          {!isCollapsed && hasChildren ? (
-            <ul>
-              {items.map((item, index) => {
-                return (
-                  <TreeNode
-                    key={item.url + index.toString()}
-                    setCollapsed={setCollapsed}
-                    collapsed={collapsed}
-                    {...item}
-                  />
-                );
-              })}
-            </ul>
-          ) : null}
-        </li>
-        </>
-        );
+        {title && (
+          <Link to={url}>
+            {title}
+            {!config.sidebar.frontLine && title && hasChildren ? (
+              <button onClick={collapse} aria-label="collapse" className="collapser">
+                {!isCollapsed ? <OpenedSvg /> : <ClosedSvg />}
+              </button>
+            ) : null}
+          </Link>
+        )}
+        {!isCollapsed && hasChildren ? (
+          <ul>
+            {items.map((item, index) => {
+              return (
+                <TreeNode
+                  key={item.url + index.toString()}
+                  setCollapsed={setCollapsed}
+                  collapsed={collapsed}
+                  {...item}
+                />
+              );
+            })}
+          </ul>
+        ) : null}
+      </li>
+    </>
+  );
 };
 
 export default TreeNode;
