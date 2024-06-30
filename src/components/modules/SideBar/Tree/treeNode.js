@@ -6,6 +6,7 @@ import Link from '../../../core/elements/link';
 import { myStore } from '../../Header/renderHeader';
 import { useStore } from 'react-stores';
 import { graphql, useStaticQuery } from 'gatsby';
+import { globalHistory } from '@reach/router';
 
 const query =
 graphql`
@@ -35,8 +36,20 @@ const TreeNode = ({ className = '', setCollapsed, collapsed, url, title, locale,
   if (typeof document != 'undefined') {
     location = document.location;
   }
+
+  if (globalHistory.location.protocol !== 'http:') {
+    location = globalHistory.location
+  }
+
   const active =
-    location && (location.pathname === url || location.pathname === config.gatsby.pathPrefix + url);
+    location && (globalHistory.location.protocol === 'http:' ? location.pathname === url :
+      location.pathname === config.gatsby.pathPrefix + url);
+
+  console.log('---active', active)
+  console.log('location.pathname === url', location.pathname === url)
+  console.log('location.pathname === config.gatsby.pathPrefix + url', location.pathname === config.gatsby.pathPrefix + url)
+  console.log('location.pathname', location.pathname)
+  console.log('url', url)
 
   const calculatedClassName = `${className} item ${active ? 'active' : ''}`;
 

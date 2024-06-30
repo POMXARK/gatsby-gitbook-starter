@@ -3,7 +3,7 @@ const config = {
     pathPrefix: '/gatsby-gitbook-starter',
     siteUrl: 'https://hasura.io',
     gaTrackingId: null,
-    trailingSlash: false,
+    trailingSlash: true,
   },
   driverSearch: {
     fuse: true,

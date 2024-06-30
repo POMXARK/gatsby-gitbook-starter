@@ -1,4 +1,5 @@
 const matter = require('gray-matter');
+const config = require('../../../config');
 
 exports.createNodeStrapi = (node, getNode, createNodeField) => {
   let title;
@@ -33,9 +34,17 @@ exports.createNodeStrapi = (node, getNode, createNodeField) => {
     slug = categories + slug
   }
 
-  createNodeField({
-    name: `slug`,
-    node,
-    value: locale + slug,
-  });
+  if (config.gatsby && config.gatsby.trailingSlash) {
+    createNodeField({
+      name: `slug`,
+      node,
+      value: locale + slug + '/',
+    });
+  } else {
+    createNodeField({
+      name: `slug`,
+      node,
+      value: locale + slug,
+    });
+  }
 }
