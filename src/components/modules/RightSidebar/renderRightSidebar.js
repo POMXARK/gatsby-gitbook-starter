@@ -2,6 +2,7 @@ import config from '../../../../config';
 import { ListItem } from '../SideBar/styles';
 import * as React from 'react';
 import { SidebarStyles } from './styles';
+import { globalHistory } from '@reach/router';
 
 export default function renderRightSidebar(allMdx, allStrapiContent) {
 
@@ -36,8 +37,8 @@ const items = (allMdx, finalNavItems) => {
 
       if (item !== undefined) {
         if (
-          item.node.fields.slug === location.pathname ||
-          config.gatsby.pathPrefix + item.node.fields.slug === location.pathname
+          item.node.fields.slug === globalHistory.location.pathname ||
+          config.gatsby.pathPrefix + item.node.fields.slug === globalHistory.location.pathname
         ) {
 
           if (item.node.tableOfContents) {

@@ -74,6 +74,7 @@
   "scripts": {
     "start": "gatsby develop",
     "build": "gatsby build --prefix-paths",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
     "format": "prettier --write \"src/**/*.{js,jsx,css,json}\"",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\""
   },
@@ -90,6 +91,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "gatsby-plugin-remove-trailing-slashes": "^4.8.0",
+    "gh-pages": "^6.1.1",
     "prettier": "^2.5.1"
   }
 }
