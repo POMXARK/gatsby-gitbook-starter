@@ -62,28 +62,30 @@ const RightSideBarWidth = styled('div')`
   width: 224px;
 `;
 
-const Layout = ({ children, location }) => (
-  <ThemeProvider location={location}>
-    <MDXProvider components={mdxComponents}>
-      <Wrapper>
-        <LeftSideBarWidth className={'hiddenMobile'}>
-          <Sidebar location={location} />
-        </LeftSideBarWidth>
-        {config.sidebar.title ? (
-          <div
-            className={'sidebarTitle sideBarShow'}
-            dangerouslySetInnerHTML={{ __html: config.sidebar.title }}
-          />
-        ) : null}
-        <Content>
-          <MaxWidth>{children}</MaxWidth>
-        </Content>
-        <RightSideBarWidth className={'hiddenMobile'}>
-          <RightSidebar location={location} />
-        </RightSideBarWidth>
-      </Wrapper>
-    </MDXProvider>
-  </ThemeProvider>
-);
+const Layout = ({ children, location }) => {
+  return (  <ThemeProvider location={location}>
+      <MDXProvider components={mdxComponents}>
+        <Wrapper>
+          <LeftSideBarWidth className={'hiddenMobile'}>
+            <Sidebar location={location} />
+          </LeftSideBarWidth>
+          {config.sidebar.title ? (
+            <div
+              className={'sidebarTitle sideBarShow'}
+              dangerouslySetInnerHTML={{ __html: config.sidebar.title }}
+            />
+          ) : null}
+          <Content>
+            <MaxWidth>{children}</MaxWidth>
+          </Content>
+          <RightSideBarWidth className={'hiddenMobile'}>
+            <RightSidebar location={location} />
+          </RightSideBarWidth>
+        </Wrapper>
+      </MDXProvider>
+    </ThemeProvider>
+  )
+}
+
 
 export default Layout;

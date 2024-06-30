@@ -13,15 +13,9 @@ import config from '../../../config.js';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { PoweredBy } from './styles';
-import { Search } from '@styled-icons/fa-solid/Search';
-import Input, { Form } from './input';
+import Input from './input';
 import * as hitComps from './hitComps';
 import FuseSearch from './FuseSearch';
-
-const SearchIcon = styled(Search)`
-  width: 1em;
-  pointer-events: none;
-`;
 
 export const HitsWrapper = styled.div`
   display: ${props => (props.show ? `grid` : `none`)};
@@ -129,8 +123,7 @@ export default function SearchComponent({ indices, collapse, hitsAsGrid }) {
 
   useClickOutside(ref, () => setFocus(false));
   const displayResult = query.length > 0 && focus ? 'showResults' : 'hideResults';
-  console.log('searchClient', searchClient)
-  console.log('indices', indices)
+
   if (indices.length > 0) {
     return (
       <InstantSearch

@@ -58,6 +58,8 @@
     "react-instantsearch-dom": "^6.22.0",
     "react-live": "^2.4.1",
     "react-loadable": "^5.5.0",
+    "react-select": "^5.8.0",
+    "react-stores": "^6.0.0",
     "react-use-fusejs": "^2.0.2",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.0.0",

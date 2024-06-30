@@ -8,8 +8,52 @@ import { DarkModeSwitch } from './Theme/DarkModeSwitch';
 import { StyledBgDiv, myFunction } from './styles';
 import Loadable from 'react-loadable';
 import LoadingProvider from '../../mdxComponents/loading';
+import Select from 'react-select'
+import { Store, useStore } from 'react-stores';
+import { graphql, useStaticQuery } from 'gatsby';
+
+export const myStore = new Store({
+  lang: { value: 'en', label: 'en' } , // initial state values
+} , {
+  persistence: true,
+});
+
+const options = [
+  { value: 'en', label: 'en' },
+  { value: 'ru-RU', label: 'ru' }
+]
+
+const query =
+graphql`
+  {
+    allSitePage {
+      edges {
+        node {
+          path
+        }
+      }
+    }
+  }
+`
 
 export default function renderHeader({ location, isDarkThemeActive, toggleActiveTheme }, data) {
+
+  const myStoreState = useStore(myStore);
+
+  const res = Object.values(((useStaticQuery(query))['allSitePage'])['edges'])
+  const paths = res.reduce((acc, current, index) => {
+    return { ...acc, [index]: current.node.path};
+  }, {})
+  const urls = new Set(Object.values(paths));
+
+  const setUserChoice = (choice) => {
+    myStore.setState({ lang: choice });
+    const path = (window.location.pathname.split('/')).slice(2)
+    const url = `/${choice.value}/${path.join('/')}`
+    if (urls.has(url)) {
+      window.location.href = url;
+    }
+  }
 
   //----------
   const isSearchEnabled = config.header.search && config.header.search.enabled;
@@ -30,8 +74,6 @@ export default function renderHeader({ location, isDarkThemeActive, toggleActive
   });
 
   //----------
-
-  console.log('data', data);
   const logoImg = require('../../images/logo.svg');
 
   const twitter = require('../../images/twitter.svg');
@@ -141,6 +183,13 @@ export default function renderHeader({ location, isDarkThemeActive, toggleActive
               <DarkModeSwitch
                 isDarkThemeActive={isDarkThemeActive}
                 toggleActiveTheme={toggleActiveTheme}
+              />
+            </li>
+            <li>
+              <Select
+                options={options}
+                onChange={(choice) => setUserChoice(choice)}
+                defaultValue={myStoreState.lang}
               />
             </li>
           </ul>

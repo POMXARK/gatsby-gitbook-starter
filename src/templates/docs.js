@@ -11,8 +11,6 @@ export default class MDXRuntimeTest extends Component {
   render() {
     const { data } = this.props;
 
-    console.log('data', data)
-
     let navGitbook, navStrapi, nav;
 
     if (!data) {
@@ -26,13 +24,11 @@ export default class MDXRuntimeTest extends Component {
     }
     if (config.driverContent.strapi) {
       var {allStrapiContent, strapiContent } = data;
-      console.log('strapiContent', strapiContent)
       nav = navStrapi = navLinks(allStrapiContent)
     }
 
     if (strapiContent && config.driverContent.gitbook && config.driverContent.strapi) {
        nav = navGitbook.concat(navStrapi)
-      console.log('strapiContent', strapiContent)
        const strapi = {...strapiContent.article.data.childMdx, ...strapiContent}
 
        return layout(strapi, this.props, nav, docsLocation);
@@ -78,7 +74,7 @@ const navLinks = (mdx) => {
     .map(slug => {
       if (slug) {
         const { node } = mdx.edges.find(({ node }) => node.fields.slug === slug);
-        return { title: node.fields.title, url: node.fields.slug };
+        return { title: node.fields.title, url: node.fields.slug, locale: node.locale ?? null };
       }
     });
 
@@ -125,6 +121,7 @@ const navLinks = (mdx) => {
       strapiContent(id: {eq: $id}) {
         id
         slug
+        locale
         article {
           data {
             childMdx {
@@ -162,6 +159,7 @@ const navLinks = (mdx) => {
               }
             }
             slug
+            locale
           }
         }
       }

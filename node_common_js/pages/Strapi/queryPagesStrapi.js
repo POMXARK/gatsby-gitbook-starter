@@ -7,7 +7,7 @@ exports.queryPagesStrapi = `
   allStrapiContent {
     edges {
       node {
-       fields {
+        fields {
           id
           slug
         }
@@ -25,6 +25,13 @@ exports.queryPagesStrapi = `
         }
         id
         slug
+        localizations {
+          data {
+            attributes {
+              article
+            }
+          }
+        }
       }
     }
   }

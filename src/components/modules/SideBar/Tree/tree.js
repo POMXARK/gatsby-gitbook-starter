@@ -11,6 +11,7 @@ const calculateTreeData = edges => {
       {
         node: {
           fields: { slug, title },
+          locale,
         },
       }
     ) => {
@@ -30,12 +31,13 @@ const calculateTreeData = edges => {
         existingItem.url = slug;
         existingItem.title = title;
       } else {
-        prevItems.push({
-          label: parts[slicedLength],
-          url: slug,
-          items: [],
-          title,
-        });
+          prevItems.push({
+            label: parts[slicedLength],
+            url: slug,
+            items: [],
+            title,
+            locale
+          });
       }
 
       return accu;

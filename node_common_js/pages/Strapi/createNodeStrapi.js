@@ -3,6 +3,7 @@ const matter = require('gray-matter');
 exports.createNodeStrapi = (node, getNode, actions, createNodeField) => {
     const children = getNode(node.children)
     const title = matter(children.article).data.title
+    const locale = node.locale ? '/' + node.locale : '/default'
 
     createNodeField({
       name: 'id',
@@ -29,6 +30,6 @@ exports.createNodeStrapi = (node, getNode, actions, createNodeField) => {
     createNodeField({
       name: `slug`,
       node,
-      value: slug,
+      value: locale + slug,
     });
 }

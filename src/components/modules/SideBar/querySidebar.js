@@ -35,6 +35,7 @@ const queryGitbookStrapi = graphql`
             slug
             title
           }
+          locale
         }
       }
     }
